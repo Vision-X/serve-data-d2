@@ -6,16 +6,16 @@ const app = express();
 
 function findById(data, id) {
     for (let i = 0; i < data.length; i++) {
-        if (data[i] == id) {
+        if (data[i].id == id) {
             return data[i];
         }
     }
     return null;
 }
 
-function findByFullName(data, nameKey) {
+function findByFullName(data, fullName) {
     for (let i = 0; i < data.length; i++) {
-        if (data[i] == nameKey) {
+        if (data[i].fullName == fullName) {
             return data[i];
         }
     }
@@ -39,6 +39,20 @@ app.get("/:id", function(req, res) {
         });
     } else {
         res.json({data: currentInstructor});
+    }
+})
+
+app.get("/:fullName", function(req, res) {
+    let instructorName = findByFullName(instructors, req.params.fullName);
+    if (!instructorName) {
+        res.status(404);
+        res.json({
+            error: {
+                message: "Nobody named that here buddy!"
+            }
+        });
+    } else {
+        res.json({data: instructorName});
     }
 })
 
